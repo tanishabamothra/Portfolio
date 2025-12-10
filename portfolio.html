@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tanisha Bamothra — Portfolio</title>
+  <style>
+    :root{
+      --bg:#0b1020; --card:#0f1724; --muted:#98a0b3; --accent:#7c5cff; --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+      --text:#e6eef8;
+      --accent-2:#00d4ff;
+      --shadow: 0 8px 30px rgba(2,6,23,0.6);
+    }
+
+    html:has(#togg:checked){
+      --bg:#f6f8fb; --card:#ffffff; --muted:#566076; --accent:#4f46e5;
+      --glass: rgba(9,20,40,0.03); --glass-2: rgba(9,20,40,0.01);
+      --text:#07122a; --accent-2:#06b6d4;
+      --shadow: 0 10px 30px rgba(12,25,50,0.06);
+    }
+
+    /* Light mode variables (switched by .light-mode) */
+    .light-mode{ --bg:#f6f8fb; --card:#ffffff; --muted:#566076; --accent:#4f46e5; --glass: rgba(9,20,40,0.03); --text:#07122a; --accent-2:#06b6d4; --shadow: 0 10px 30px rgba(12,25,50,0.06);} 
+
+    /* Toggle checkbox hack */
+    .theme-toggle{position:fixed;right:18px;top:18px;z-index:80}
+    .theme-toggle input{display:none}
+    .theme-toggle label{
+      display:inline-grid;place-items:center;width:48px;height:28px;border-radius:18px;background:linear-gradient(180deg,var(--glass),var(--glass-2));backdrop-filter: blur(6px);cursor:pointer;border:1px solid rgba(255,255,255,0.04);
+      box-shadow:var(--shadow);
+    }
+    .theme-toggle .knob{width:20px;height:20px;border-radius:50%;background:linear-gradient(180deg,var(--text),rgba(0,0,0,0.06));transition:all .35s ease;transform:translateX(0)}
+    .theme-toggle input:checked + label .knob{transform:translateX(20px)}
+    /* Root layout */
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;color:var(--text);background:radial-gradient(1200px 600px at 10% 10%, rgba(124,92,255,0.12), transparent), radial-gradient(1000px 500px at 90% 90%, rgba(0,212,255,0.06), transparent), var(--bg);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+    .container{max-width:1100px;margin:48px auto;padding:32px;display:grid;grid-template-columns:340px 1fr;gap:28px}
+
+    /* Left column */
+    .profile-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:16px;padding:28px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.03)}
+    .avatar{width:90px;height:90px;border-radius:18px;background:linear-gradient(120deg,var(--accent),var(--accent-2));display:inline-grid;place-items:center;color:white;font-weight:700;font-size:28px;margin-bottom:16px}
+    .name{font-size:20px;font-weight:700;margin:0}
+    .role{color:var(--muted);font-size:13px;margin-top:6px}
+    .muted-line{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.03),transparent);margin:18px 0;border-radius:2px}
+
+    .contact a{display:block;color:var(--text);text-decoration:none;font-size:13px;margin:6px 0}
+    .chip{display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.02);margin:6px 6px 6px 0;font-size:13px}
+
+    /* Skill bars */
+    .skill{margin:12px 0}
+    .skill .label{display:flex;justify-content:space-between;font-size:13px}
+    .skill .bar{height:10px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden;margin-top:8px}
+    .skill .bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0%;animation:grow 1.2s cubic-bezier(.2,.9,.2,1) forwards}
+
+    @keyframes grow{from{width:0}to{width:var(--w)}}
+
+    /* Right column */
+    .main-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:16px;padding:28px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.03)}
+    .hero{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+    .hero h1{margin:0;font-size:28px}
+    .hero p{color:var(--muted);margin:6px 0 0}
+
+    .action-row{margin-top:16px;display:flex;gap:12px}
+    .btn{padding:10px 14px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;font-weight:600;text-decoration:none;border:none;display:inline-flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 24px rgba(124,92,255,0.12);transition:transform .18s}
+    .btn:active{transform:translateY(1px)}
+
+    .section{margin-top:22px}
+    .section h3{margin:0 0 12px 0;font-size:16px}
+    .projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .project{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);transition:transform .32s, box-shadow .32s}
+    .project:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(2,6,23,0.45)}
+    .project .meta{font-size:13px;color:var(--muted);margin-top:8px}
+
+    /* Animated header underline */
+    .underline{display:inline-block;position:relative}
+    .underline:after{content:'';position:absolute;left:0;bottom:-6px;height:3px;width:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transform-origin:left;transform:scaleX(0);transition:transform .5s cubic-bezier(.2,.9,.2,1)}
+    .underline:hover:after{transform:scaleX(1)}
+
+    /* Education & small lists */
+    .list-item{display:flex;justify-content:space-between;gap:12px;padding:10px;border-radius:10px}
+    .muted{color:var(--muted);font-size:13px}
+
+    /* Footer */
+    footer{margin-top:26px;color:var(--muted);font-size:13px;text-align:center}
+
+    /* Fancy floating decor */
+    .float-deco{position:fixed;right:-140px;bottom:-80px;width:420px;height:420px;border-radius:50%;background:conic-gradient(from 90deg at 50% 50%, rgba(124,92,255,0.14), rgba(0,212,255,0.08), transparent);filter:blur(40px);z-index:0;pointer-events:none}
+
+    /* Responsive */
+    @media (max-width:900px){.container{grid-template-columns:1fr;padding:20px}.theme-toggle{right:12px}.avatar{margin:0 auto}}
+
+    /* small accessibility helpers */
+    a:focus, button:focus{outline:2px dashed rgba(124,92,255,0.25);outline-offset:4px}
+
+    /* Prepare dynamic widths for skills using inline style --w */
+  </style>
+</head>
+<body>
+  <!-- Theme toggle uses checkbox hack to add class to body via CSS sibling trick not possible without JS.
+       Instead we will visually toggle the knob and set a light-mode class on the html element using :checked on a hidden checkbox
+       combined with the :root override by applying .light-mode to body via the checkbox sibling label hack.
+       Because we cannot change document class without JS, we fake light-mode by using the :checked state on body:has selector.
+       Note: :has isn't supported in some older browsers, but modern browsers support it. This keeps the solution JS-free. -->
+
+  <div class="theme-toggle">
+    <input id="togg" type="checkbox" aria-label="Toggle theme">
+    <label for="togg" title="Toggle theme">
+      <span class="knob"></span>
+    </label>
+  </div>
+
+  <div class="float-deco" aria-hidden="true"></div>
+
+  <div class="container">
+    <aside class="profile-card">
+      <div class="avatar">TB</div>
+      <h2 class="name">Tanisha Bamothra</h2>
+      <div class="role">AI Engineer · ML Developer · Frontend Developer</div>
+      <div class="muted-line"></div>
+
+      <div class="contact">
+        <a href="mailto:tanishabamothra@gmail.com">tanishabamothra@gmail.com</a>
+        <a href="tel:+918919684242">(+91) 8919684242</a>
+        <a href="https://www.linkedin.com/in/tanisha-bamotra-054b71308/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+
+      <div class="section">
+        <h3>Skills</h3>
+        <div class="skill">
+          <div class="label"><span>Python</span><span class="muted">Expert</span></div>
+          <div class="bar"><i style="--w:95%"></i></div>
+        </div>
+        <div class="skill">
+          <div class="label"><span>Machine Learning</span><span class="muted">Advanced</span></div>
+          <div class="bar"><i style="--w:88%"></i></div>
+        </div>
+        <div class="skill">
+          <div class="label"><span>Frontend (HTML/CSS/JS)</span><span class="muted">Intermediate</span></div>
+          <div class="bar"><i style="--w:76%"></i></div>
+        </div>
+        <div class="skill">
+          <div class="label"><span>SQL & Data</span><span class="muted">Intermediate</span></div>
+          <div class="bar"><i style="--w:72%"></i></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Education</h3>
+        <div class="list-item"><div>B.Tech — Malla Reddy University</div><div class="muted">07/2023 - 05/2027</div></div>
+        <div class="list-item" style="margin-top:8px"><div>Intermediate — Sri Gayatri Junior College</div><div class="muted">06/2021 - 04/2023</div></div>
+      </div>
+
+      <div class="section">
+        <h3>Certifications</h3>
+        <div class="chip">Cambridge B2</div>
+        <div class="chip">Python Basics</div>
+        <div class="chip">Java Basics</div>
+      </div>
+    </aside>
+
+    <main class="main-card">
+      <div class="hero">
+        <div>
+          <h1>Crafting intelligent systems with a creative touch</h1>
+          <p class="muted">Aspiring AI & ML Engineer building models, interactive web experiences & accessible machine interfaces.</p>
+
+          <div class="action-row">
+            <a class="btn" href="#projects">View Projects</a>
+            <a class="btn" href="mailto:tanishabamothra@gmail.com">Contact</a>
+          </div>
+        </div>
+        <div style="min-width:220px;text-align:right">
+          <div class="underline">Hyderabad, Telangana</div>
+          <div class="muted" style="margin-top:10px">Open to internships · Available 2025</div>
+        </div>
+      </div>
+
+      <section id="projects" class="section">
+        <h3>Projects</h3>
+        <div class="projects">
+          <article class="project">
+            <strong>Rentals</strong>
+            <div class="meta">AI-driven fashion rental platform — Aug 2024 - Dec 2024</div>
+            <p class="muted" style="margin-top:8px">Personalization, scalable inventory, payments & UX that reduces fast-fashion waste.</p>
+          </article>
+
+          <article class="project">
+            <strong>Gesture Connect</strong>
+            <div class="meta">Sign-language to text — Dec 2024 - May 2024</div>
+            <p class="muted" style="margin-top:8px">Web app with webcam hand tracking, TensorFlow.js frontend and CNN backend for real-time translation.</p>
+          </article>
+
+          <article class="project">
+            <strong>Smart Facial Recognition Attendance</strong>
+            <div class="meta">CNN (InceptionV3) based system</div>
+            <p class="muted" style="margin-top:8px">Real-time face recognition with incremental learning, AES encryption and role-based access (95% accuracy).</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h3>Profile</h3>
+        <p class="muted">Aspiring AI & ML Engineer with hands-on experience in ML models, data analysis and frontend development. Interested in gaming technologies, immersive systems and game analytics.</p>
+      </section>
+
+      <section class="section">
+        <h3>Achievements & Activities</h3>
+        <ul class="muted">
+          <li>Event coordinator for university cultural festivals</li>
+          <li>Participated in intercollege hackathon (24-hour sprint)</li>
+          <li>Selected for campus innovation showcase (Gesture Connect)</li>
+        </ul>
+      </section>
+
+      <footer>
+        THANK YOU - REGARDS TANISHA
+      </footer>
+
+    </main>
+  </div>
+
+  
+</body>
+</html>
